@@ -174,6 +174,52 @@ public class Graph {
     this.readGraph(fName);
   } // Graph
 
+
+  /// Excersice B1:
+  
+  Edge[] shortestPath(int source, int sink) {
+
+    // everything 0
+    int[] verticesDist = new int[this.numVertices];
+
+    for (int i = 0; i < this.numVertices; i++) {
+      if (i != source) {
+        verticesDist[i] = Integer.MAX_VALUE;
+      } // if
+    } // for
+
+    Edge[] path = new Edge[this.numVertices - 1];
+    
+
+    int previousVertex = source;
+    int currentVertex = source;
+
+    List<Edge> currentEdges = vertices[currentVertex];
+
+    Iterator edgeIter = edgesFrom(currentVertex).iterator();
+{
+    while(marks[sink] == 0 && unusedVertices.peek() != Integer.MAX_VALUE) {
+      try {
+
+        Edge smallest = vertices[currentVertex].get(0);
+
+        while(edgeIter.hasNext()) {
+          Edge next = (Edge) edgeIter.next();
+          if (smallest.weight() > next.weight()) {
+            smallest = next;
+          }
+        }
+
+        path[currentVertex] = smallest;
+        verticesDist[smallest.target()] = currentVertex + smallest.weight();
+
+      } catch (Exception e) {
+      }
+    }
+
+    return path;
+  }
+
   // +----------------------+----------------------------------------
   // | Vertex names/numbers |
   // +----------------------+
