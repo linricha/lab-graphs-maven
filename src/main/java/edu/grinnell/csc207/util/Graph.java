@@ -289,7 +289,10 @@ public class Graph {
         index++;
 
       }
-      
+
+      if (smallestIndex == -1) { // next smallest value cannot be found.
+        break;
+      }
     
 
       marks[smallestIndex] = MARK; // mark vertex
@@ -297,7 +300,7 @@ public class Graph {
       List<Edge> currentEdges = vertices[smallestIndex];
       
       for (int i = 0; i < currentEdges.size(); i++) {
-        Edge compare = vertices[i].get(i);
+        Edge compare = currentEdges.get(i);
         int compareVertex = compare.target();
 
         if (verticesDist[smallestIndex] + compare.weight() < verticesDist[compareVertex]) {
