@@ -174,6 +174,34 @@ public class Graph {
     this.readGraph(fName);
   } // Graph
 
+  /**
+   * Prints out a vertices that are reachable from vertex.
+   *
+   * @param pen
+   *   Used for printing.
+   * @param vertex
+   *   the vertex to start from. 
+   * @pre 0 <= vertex && vertex <= numVertices - 1
+   */
+  void reachableFrom(PrintWriter pen, int vertex) {
+
+    // intialized to 0
+    byte[] marked = new byte[this.numVertices]
+    
+    // byte[vertex] = MARK; since can be technically reached from another path
+    for (int i = 0; i < vertices[vertex].length(); i++) {
+      
+    }
+    pen.print("")
+    
+  }
+
+
+
+
+
+  
+
 
   /// Excersice B1:
   
