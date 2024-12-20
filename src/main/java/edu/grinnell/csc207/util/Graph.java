@@ -190,8 +190,10 @@ public class Graph {
       this.marks[i] = 0;
     } // for
 
+    this.marks[vertex] = MARK;
+    
     // marks vertices in breath-first fashion
-    setMarks(vertex, MARK);
+    setMarks(vertex, (byte) (MARK + MARK));
 
     boolean finished = false;
     boolean first = true;
@@ -226,18 +228,14 @@ public class Graph {
    * @pre 0 <= vertex && vertex <= numVertices - 1
    */
   void setMarks(int vertex, byte specificMark) {
-    // boolean stop = true;
     
-    // byte[vertex] = MARK; since can be technically reached from another path
+    
     for (int i = 0; i < vertices[vertex].size(); i++) {
       Edge connection = vertices[vertex].get(i);
       int seenVertex = connection.target();
 
       if (this.marks[seenVertex] == 0) {
         this.marks[seenVertex] = specificMark;
-        // pen.print(", " + this.vertexNames[seenVertex]);
-        // pen.flush();
-        // stop = false;
       }
     }
 
@@ -256,50 +254,63 @@ public class Graph {
   
 
 
-//   /// Excersice B1:
+  /// Excersice B1:
   
-//   Edge[] shortestPath(int source, int sink) {
+  Edge[] shortestPath(int source, int sink) {
 
-//     // everything 0
-//     int[] verticesDist = new int[this.numVertices];
+    // everything 0
+    // stores distance
+    int[] verticesDist = new int[this.numVertices];
 
-//     for (int i = 0; i < this.numVertices; i++) {
-//       if (i != source) {
-//         verticesDist[i] = Integer.MAX_VALUE;
-//       } // if
-//     } // for
+    // set everything except source to infinity (so-called)
+    for (int i = 0; i < this.numVertices; i++) {
+      if (i != source) {
+        verticesDist[i] = Integer.MAX_VALUE;
+      } // if
+    } // for
 
-//     Edge[] path = new Edge[this.numVertices - 1];
-    
+    this.marks = new byte[numVertices];
 
-//     int previousVertex = source;
-//     int currentVertex = source;
+    // stores edges used
+    Edge[] path = new Edge[this.numVertices];
 
-//     List<Edge> currentEdges = vertices[currentVertex];
 
-//     Iterator edgeIter = edgesFrom(currentVertex).iterator();
-// {
-//     while(marks[sink] == 0 && unusedVertices.peek() != Integer.MAX_VALUE) {
-//       try {
+    while(marks[sink] == 0) {
+      int index = 0;
+      int smallestIndex = -1;
+      while (index < numVertices) {
+        
+        if (marks[index] != 0 || verticesDist[index] == Integer.MAX_VALUE) {
+          index++;
+        } else {
+          if (smallestIndex == -1) {
+            smallestIndex = index;
+          } else if (verticesDist[smallestIndex] > verticesDist[index]){
+            smallestIndex = index;
+          }
+        }
 
-//         Edge smallest = vertices[currentVertex].get(0);
+      }
 
-//         while(edgeIter.hasNext()) {
-//           Edge next = (Edge) edgeIter.next();
-//           if (smallest.weight() > next.weight()) {
-//             smallest = next;
-//           }
-//         }
+      marks[smallestIndex] = MARK; // mark vertex
 
-//         path[currentVertex] = smallest;
-//         verticesDist[smallest.target()] = currentVertex + smallest.weight();
+      List<Edge> currentEdges = vertices[smallestIndex];
+      
+      for (int i = 0; i < currentEdges.size(); i++) {
+        Edge compare = vertices[i].get(i);
+        int compareVertex = compare.target();
 
-//       } catch (Exception e) {
-//       }
-//     }
+        if (verticesDist[smallestIndex] + compare.weight() < verticesDist[compareVertex]) {
+          verticesDist[compareVertex] = verticesDist[smallestIndex] + compare.weight();
+          path[compareVertex] = compare;
+        }
 
-//     return path;
-//   }
+
+      }
+    } 
+
+    return path;
+  }
 
   // +----------------------+----------------------------------------
   // | Vertex names/numbers |
