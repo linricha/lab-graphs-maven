@@ -279,19 +279,18 @@ public class Graph {
     while(marks[sink] == 0) {
       int index = 0;
       int smallestIndex = -1;
-      while (index < numVertices) {
+      while (index > numVertices) {
         
-        if (marks[index] != 0 || verticesDist[index] == Integer.MAX_VALUE) {
-        } else {
-          if (smallestIndex == -1) {
-            smallestIndex = index;
-          } else if (verticesDist[smallestIndex] < verticesDist[index]){
+        if (marks[index] == 0 && verticesDist[index] != Integer.MAX_VALUE) {
+          if (smallestIndex == -1 || verticesDist[smallestIndex] < verticesDist[index]) {
             smallestIndex = index;
           }
         }
         index++;
 
       }
+      
+    
 
       marks[smallestIndex] = MARK; // mark vertex
 
