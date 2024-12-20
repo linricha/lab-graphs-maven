@@ -175,7 +175,7 @@ public class Graph {
   } // Graph
 
   /**
-   * Prints out a vertices that are reachable from vertex.
+   * Sets up reachableFromHelper and prints out vertices that are reachable from vertex.
    *
    * @param pen
    *   Used for printing.
@@ -183,70 +183,123 @@ public class Graph {
    *   the vertex to start from. 
    * @pre 0 <= vertex && vertex <= numVertices - 1
    */
-  void reachableFrom(PrintWriter pen, int vertex) {
+  public void reachableFrom(PrintWriter pen, int vertex) {
 
-    // intialized to 0
-    byte[] marked = new byte[this.numVertices]
-    
-    // byte[vertex] = MARK; since can be technically reached from another path
-    for (int i = 0; i < vertices[vertex].length(); i++) {
-      
-    }
-    pen.print("")
-    
-  }
-
-
-
-
-
-  
-
-
-  /// Excersice B1:
-  
-  Edge[] shortestPath(int source, int sink) {
-
-    // everything 0
-    int[] verticesDist = new int[this.numVertices];
-
-    for (int i = 0; i < this.numVertices; i++) {
-      if (i != source) {
-        verticesDist[i] = Integer.MAX_VALUE;
-      } // if
+    // clear marks
+    for (int i = 0; i < this.marks.length; i++) {
+      this.marks[i] = 0;
     } // for
 
-    Edge[] path = new Edge[this.numVertices - 1];
-    
+    // marks vertices in breath-first fashion
+    setMarks(vertex, MARK);
 
-    int previousVertex = source;
-    int currentVertex = source;
+    boolean finished = false;
+    boolean first = true;
+    pen.println(vertexNames[vertex]);
 
-    List<Edge> currentEdges = vertices[currentVertex];
-
-    Iterator edgeIter = edgesFrom(currentVertex).iterator();
-{
-    while(marks[sink] == 0 && unusedVertices.peek() != Integer.MAX_VALUE) {
-      try {
-
-        Edge smallest = vertices[currentVertex].get(0);
-
-        while(edgeIter.hasNext()) {
-          Edge next = (Edge) edgeIter.next();
-          if (smallest.weight() > next.weight()) {
-            smallest = next;
-          }
+    for (byte i = MARK; !finished; i += MARK) {
+      finished = true;
+      for (int j = 0; j < this.marks.length; j++) {
+        if (this.marks[j] == i) {
+          finished = false;
+          if (!first) {
+            pen.print(", " + vertexNames[j]);
+          } else if (first) {
+            pen.print(vertexNames[j]);
+            first = false;
+          } // if/else
+          pen.flush();
         }
+      }
+    }
+    pen.println();
+  }
 
-        path[currentVertex] = smallest;
-        verticesDist[smallest.target()] = currentVertex + smallest.weight();
+  /**
+   * Sets the marks for the vertices reachable from vertex in a
+   * specific order - breadth first. 
+   *
+   * @param vertex
+   *   the vertex to start from. 
+   * @specificMark 
+   *   a starting mark
+   * @pre 0 <= vertex && vertex <= numVertices - 1
+   */
+  void setMarks(int vertex, byte specificMark) {
+    // boolean stop = true;
+    
+    // byte[vertex] = MARK; since can be technically reached from another path
+    for (int i = 0; i < vertices[vertex].size(); i++) {
+      Edge connection = vertices[vertex].get(i);
+      int seenVertex = connection.target();
 
-      } catch (Exception e) {
+      if (this.marks[seenVertex] == 0) {
+        this.marks[seenVertex] = specificMark;
+        // pen.print(", " + this.vertexNames[seenVertex]);
+        // pen.flush();
+        // stop = false;
       }
     }
 
-    return path;
+    for (int j = 0; j < this.marks.length; j ++) {
+      if (this.marks[j] == specificMark) {
+        setMarks(j, (byte) (specificMark + MARK));
+      }
+    }
+
   }
+
+
+
+
+
+  
+
+
+//   /// Excersice B1:
+  
+//   Edge[] shortestPath(int source, int sink) {
+
+//     // everything 0
+//     int[] verticesDist = new int[this.numVertices];
+
+//     for (int i = 0; i < this.numVertices; i++) {
+//       if (i != source) {
+//         verticesDist[i] = Integer.MAX_VALUE;
+//       } // if
+//     } // for
+
+//     Edge[] path = new Edge[this.numVertices - 1];
+    
+
+//     int previousVertex = source;
+//     int currentVertex = source;
+
+//     List<Edge> currentEdges = vertices[currentVertex];
+
+//     Iterator edgeIter = edgesFrom(currentVertex).iterator();
+// {
+//     while(marks[sink] == 0 && unusedVertices.peek() != Integer.MAX_VALUE) {
+//       try {
+
+//         Edge smallest = vertices[currentVertex].get(0);
+
+//         while(edgeIter.hasNext()) {
+//           Edge next = (Edge) edgeIter.next();
+//           if (smallest.weight() > next.weight()) {
+//             smallest = next;
+//           }
+//         }
+
+//         path[currentVertex] = smallest;
+//         verticesDist[smallest.target()] = currentVertex + smallest.weight();
+
+//       } catch (Exception e) {
+//       }
+//     }
+
+//     return path;
+//   }
 
   // +----------------------+----------------------------------------
   // | Vertex names/numbers |

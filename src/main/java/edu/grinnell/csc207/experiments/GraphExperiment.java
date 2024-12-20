@@ -73,6 +73,8 @@ public class GraphExperiment {
     // Remove an edge
     g.removeEdge("a", "c");
     g.dumpWithNames(pen);
+
+    g.reachableFrom(pen, 1);
   } // main(String[])
 
 } // class GraphExperiment
