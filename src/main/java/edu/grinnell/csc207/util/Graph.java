@@ -269,6 +269,7 @@ public class Graph {
       } // if
     } // for
 
+    //reset marks
     this.marks = new byte[numVertices];
 
     // stores edges used
@@ -281,14 +282,14 @@ public class Graph {
       while (index < numVertices) {
         
         if (marks[index] != 0 || verticesDist[index] == Integer.MAX_VALUE) {
-          index++;
         } else {
           if (smallestIndex == -1) {
             smallestIndex = index;
-          } else if (verticesDist[smallestIndex] > verticesDist[index]){
+          } else if (verticesDist[smallestIndex] < verticesDist[index]){
             smallestIndex = index;
           }
         }
+        index++;
 
       }
 
